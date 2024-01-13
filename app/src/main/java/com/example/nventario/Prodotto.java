@@ -11,6 +11,9 @@ public class Prodotto {
         this.quantità = quantità;
     }
 
+    public Prodotto() {
+    }
+
     public String getEan() {
         return ean;
     }

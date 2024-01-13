@@ -35,7 +35,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Prodotto product = list.get(position);
         holder.itemNumber.setText(""+product.getQuantità());
-        holder.itemEan.setText(product.getEan());
         holder.itemName.setText(product.getName());
     }
 
@@ -50,7 +49,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemEan = itemView.findViewById(R.id.itemEan);
             itemName = itemView.findViewById(R.id.itemName);
             itemNumber = itemView.findViewById(R.id.itemNumber);
         }
