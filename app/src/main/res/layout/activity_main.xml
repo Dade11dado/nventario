@@ -22,7 +22,7 @@
         android:textSize="26sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Inventario"
+        android:text="@string/inventario"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -31,16 +31,18 @@
         android:id="@+id/Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="V"
+        android:text="@string/cerca"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/Text"
         app:layout_constraintTop_toBottomOf="@id/Text"
         app:layout_constraintBottom_toTopOf="@id/recyclerView"/>
 <EditText
+    android:inputType="text"
+    android:autofillHints="ean code"
     android:id="@+id/Ean"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:hint="Scansione il codice a barre"
+    android:hint="@string/scansione_il_codice_a_barre"
     android:imeOptions="actionGo"
     android:imeActionId="666"
     android:imeActionLabel="Some Label"
@@ -70,6 +72,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:text="Ottieni file!"/>
+        android:text="@string/ottieni_file"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

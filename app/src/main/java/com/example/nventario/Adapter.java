@@ -1,12 +1,16 @@
 package com.example.nventario;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.w3c.dom.Text;
@@ -33,6 +37,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        if (position == 0) {
+            ObjectAnimator colorFade = ObjectAnimator.ofObject(holder.layout, "backgroundColor", new ArgbEvaluator(), Color.argb(66,255,0,0), 0x66FFD8BE);
+            colorFade.setDuration(1000);
+            colorFade.start();
+            holder.layout.setBackgroundColor(R.drawable.constrain_bg);
+        }
         Prodotto product = list.get(position);
         holder.itemNumber.setText(""+product.getQuantità());
         holder.itemName.setText(product.getName());
@@ -46,11 +56,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> {
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView itemEan, itemName, itemNumber;
+        ConstraintLayout layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.itemName);
             itemNumber = itemView.findViewById(R.id.itemNumber);
+            layout= itemView.findViewById(R.id.constraintLayout);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.nventario;
 
-public class Prodotto {
+public class Prodotto{
 
     String ean, name, date;
     int quantità;
@@ -43,4 +43,6 @@ public class Prodotto {
     public String getDate(){return date;}
 
     public void setDate(String date){this.date = date;}
+
+
 }

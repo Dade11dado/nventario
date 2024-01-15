@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Prodotto> prodottos) {
                 productList.clear();
                 productList.addAll(prodottos);
+                productList.sort(Comparator.comparing(Prodotto::getDate).reversed());
                 myAdapter = new Adapter(MainActivity.this, productList);
                 recyclerView.setAdapter(myAdapter);
                 myAdapter.notifyDataSetChanged();
@@ -100,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         button.setOnClickListener(view -> {
             workEan(et.getText().toString());
+            et.setText("");
         });
 
         et.setOnKeyListener((view, i, keyEvent) -> {
@@ -118,71 +120,76 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-   
+
     public void workEan(String ean) {
 
-            util.getProductLiveData().observe(MainActivity.this, new Observer<List<Prodotto>>() {
+        util.getProductLiveData().observe(MainActivity.this, new Observer<List<Prodotto>>() {
+            @Override
+            public void onChanged(List<Prodotto> prodottos) {
+                productList.clear();
+                productList.addAll(prodottos);
+                productList.sort(Comparator.comparing(Prodotto::getDate).reversed());
+                myAdapter.notifyDataSetChanged();
+            }
+        });
+
+        //getting index of the eans, if ean not in list then return -1
+        int index = util.getIndex(ean, productList);
+
+        //check if index in list, if not then ask the user for the name of the product
+        if (index < 0) {
+            try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Nome prodotto");
+
+            // Set up the input
+            final EditText input = new EditText(MainActivity.this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
-                public void onChanged(List<Prodotto> prodottos) {
-                    productList.clear();
-                    productList.addAll(prodottos);
+                public void onClick(DialogInterface dialog, int which) {
+                    m_Text = input.getText().toString();
+                    Prodotto product = new Prodotto(ean,m_Text,util.getDate(),1);
+                    productList.add(product);
+                    productList.sort(Comparator.comparing(Prodotto::getDate).reversed());
                     myAdapter.notifyDataSetChanged();
+                    util.addItem(product);
+                    recyclerView.scrollToPosition(index);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
                 }
             });
 
-            //getting index of the eans, if ean not in list then return -1
-            int index = util.getIndex(ean, productList);
-
-            //check if index in list, if not then ask the user for the name of the product
-            if (index < 0) {
-                try {
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                    r.play();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Nome prodotto");
-
-                // Set up the input
-                final EditText input = new EditText(MainActivity.this);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
-                builder.setView(input);
-                // Set up the buttons
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        m_Text = input.getText().toString();
-                        Prodotto product = new Prodotto(ean,m_Text,util.getDate(),1);
-                        productList.add(product);
-                        myAdapter.notifyDataSetChanged();
-                        util.addItem(product);
-                        recyclerView.scrollToPosition(index);
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
+            builder.show();
 
 
-            }else{
-                //If product already in list simply add 1 to total quantity
-                int quantity = productList.get(index).getQuantità();
-                productList.get(index).setQuantità(quantity+1);
-                util.updateItem(ean,quantity+1,util.getDate());
-                myAdapter.notifyDataSetChanged();
-                recyclerView.scrollToPosition(0);
-            }
-
-
+        }else{
+            //If product already in list simply add 1 to total quantity
+            int quantity = productList.get(index).getQuantità();
+            String date = util.getDate();
+            productList.get(index).setQuantità(quantity+1);
+            productList.get(index).setDate(date);
+            util.updateItem(ean,quantity+1,date);
+            productList.sort(Comparator.comparing(Prodotto::getDate).reversed());
+            myAdapter.notifyDataSetChanged();
+            recyclerView.scrollToPosition(0);
         }
+
+
+    }
 
 
 }

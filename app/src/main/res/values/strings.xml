@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">nventario</string>
+    <string name="inventario">Inventario</string>
+    <string name="cerca">Cerca</string>
+    <string name="scansione_il_codice_a_barre">Scansione il codice a barre</string>
+    <string name="ottieni_file">Ottieni file!</string>
 </resources>
