@@ -1,17 +1,8 @@
 package com.example.nventario;
 
-
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.database.DataSnapshot;
@@ -30,15 +21,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import java.time.format.DateTimeFormatter;
@@ -103,7 +89,7 @@ public class Util {
         }
 
     public String getDate(){
-        DateTimeFormatter dtf = null;
+        DateTimeFormatter dtf;
         LocalDateTime now;
         String date = "";
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -115,22 +101,10 @@ public class Util {
         return date;
     }
 
-    public ArrayList<Prodotto> sorteList(ArrayList<Prodotto> prduct) {
-        ArrayList<Prodotto> sort = new ArrayList<Prodotto>();
-
-        Collections.sort(sort, new Comparator<Prodotto>() {
-            @Override
-            public int compare(Prodotto prodotto, Prodotto t1) {
-                return prodotto.getDate().compareTo(t1.getDate());
-            }
-        });
-        return sort;
-    }
-
     public void createExcel(ArrayList<Prodotto> list) throws IOException {
         int rowP = 1;
-        Cell cell = null;
-        Sheet sheet = null;
+        Cell cell;
+        Sheet sheet;
         String EXCEL_SHEET_NAME = "Inventario";
 
         Workbook workbook = new HSSFWorkbook();
